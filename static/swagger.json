@@ -1,0 +1,231 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This api is intended for storing and searching of Valid German plate-numbers",
+    "version": "1.0.0",
+    "title": "Number Plate Search"
+  },
+  "host": "localhost:9095",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "plate",
+      "description": "Get stored number plates"
+    },
+    {
+      "name": "search_plate",
+      "description": "Search for number plates using edit distance"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/plate": {
+      "post": {
+        "tags": [
+          "plate"
+        ],
+        "summary": "Add a new number plate",
+        "description": "",
+        "operationId": "addPlate",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/text"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "plate",
+            "description": "Takes valid German number plate as input",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/platePostInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/plateObject"
+            }
+          },
+          "400": {
+            "description": "Not a valid request/plate field not found"
+          },
+          "422": {
+            "description": "Not a valid Plate Number"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "plate"
+        ],
+        "summary": "Return all plates stored",
+        "description": "",
+        "operationId": "getplates",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/plateGetObject"
+            }
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/search-plate": {
+      "get": {
+        "tags": [
+          "search_plate"
+        ],
+        "summary": "Show all the search results based on edit distance",
+        "description": "",
+        "operationId": "getInventory",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "Nearest matching string to the plates search",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "levenshtein",
+            "in": "query",
+            "description": "Edit distance from the key to be searched",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/searchPlateResponse"
+            }
+          },
+          "400": {
+            "description": "Given search-key format or distance format is Incorrect"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "NumberPlate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "plate_num": {
+          "type": "string",
+          "format": "int64"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "xml": {
+        "name": "NumberPlate"
+      }
+    },
+    "platePostInput": {
+      "type": "object",
+      "properties": {
+        "plate": {
+          "type": "string",
+          "format": "int64"
+        }
+      },
+      "xml": {
+        "name": "platePostInput"
+      }
+    },
+    "plateGetObject": {
+      "type": "object",
+      "properties": {
+        "plates": {
+          "type": "array",
+          "xml": {
+            "name": "plateGetObject",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/plateObject"
+          }
+        }
+      }
+    },
+    "plateObject": {
+      "type": "object",
+      "properties": {
+        "plate": {
+          "type": "string",
+          "format": "int64"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "xml": {
+        "name": "plateGetResponse"
+      }
+    },
+    "searchPlateResponse": {
+      "type": "object",
+      "properties": {
+        "<search-key-given>": {
+          "type": "array",
+          "xml": {
+            "name": "searchPlateResponse",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/plateObject"
+          }
+        }
+      }
+    },
+    "searchItem": {
+      "type": "object",
+      "properties": {
+        "plate": {
+          "type": "string",
+          "format": "int64"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "xml": {
+        "name": "Tag"
+      }
+    }
+  }
+}
