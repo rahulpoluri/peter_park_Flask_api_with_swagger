@@ -16,5 +16,6 @@ equal than the one provided in the query (levenshtein) to a search key (key). We
       1) flask-web (flask application micro service built using Dockerfile)
 
 *   App can be made running using below command(prerequisites: docker, docker-compose):
+      *   **git clone https://github.com/rahulpoluri/peter_park_Flask_api_with_swagger.git**
       *   DESKTOP-HECTSJ9:~/peter_park/peter_park_Flask_api_with_swagger$ **docker-compose up**
       *   To be checked in browser using [http://localhost:9095/swagger/](http://localhost:9095/swagger/)
